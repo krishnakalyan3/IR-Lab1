@@ -13,3 +13,13 @@ Check if the indexes are generated well
 
 `java -jar lukeall-3.5.0.jar -index index/`
 
+#### Building Lucene
+- cd $LUCENE_SOURCE
+- ant ivy-bootstrap
+- ant
+- cd contrib/demo/
+- ant
+- cd build
+
+
+
