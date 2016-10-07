@@ -11,5 +11,5 @@ To create an index run the following command
 
 Check if the indexes are generated well
 
-`java -jar $LUKEDIR/lukeall-3.5.0.jar -index ./index`
+`java -jar lukeall-3.5.0.jar -index index/`
 
