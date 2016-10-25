@@ -18,23 +18,14 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Date;
 import java.lang.*;
-
-//import org.apache.lucene.analysis.Analyzer;
-//import org.apache.lucene.analysis.standard.StandardAnalyzer;
-//import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
-//import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermFreqVector;
 
@@ -42,7 +33,6 @@ import org.apache.lucene.index.TermFreqVector;
  * Prints documents in tf-idf vector format and computes cosine similarities
  */
 public class TfIdfViewer {
-
     /**
      * Simple command-line based search demo.
      */
@@ -109,7 +99,7 @@ public class TfIdfViewer {
             TermWeight[] v1 = toTfIdf(reader, id1);
             TermWeight[] v2 = toTfIdf(reader, id2);
 
-            // print them out,
+            // print them out
             //printTermWeightVector(v1);
             //printTermWeightVector(v2);
             //System.out.print(normalize(v1));
@@ -155,17 +145,31 @@ public class TfIdfViewer {
 
         // compute the maximum frequence of a term in the document
         int fmax = freqs[0];
+
         for (int i = 1; i < freqs.length; i++) {
             if (freqs[i] > fmax) fmax = freqs[i];
         }
 
         // number of docs in the index
-        int nDocs = reader.numDocs();
 
-        // ###### novels/27531-0.txt
+        /*
+        Compute TF-IDF
+        df - Document Freq
+        tf -  Term Freq
+        idf - Inverse Doc Freq
+         */
+        int nDocs = reader.numDocs();
+        int df = 0;
+        double tf  =0.0;
+        double idf = 0.0;
+        double tf_idf = 0.0;
+
         for (int i = 0; i < tw.length; i++) {
-            //... code to compute stuff ...
-            tw[i] = new TermWeight(terms[i], freqs[i]);
+            df = docFreq(reader, terms[i]);
+            tf = freqs[i]/(double)fmax;
+            idf = Math.log10(1.0 * nDocs /df);
+            tf_idf = tf * idf;
+            tw[i] = new TermWeight(terms[i], tf_idf);
         }
 
         return tw;
@@ -173,34 +177,50 @@ public class TfIdfViewer {
 
     // Normalizes the weights in t so that they form a unit-length vector
     // It is assumed that not all weights are 0
+    /*
+    input args - Array of term Weights
+    returns - sum_weight_squared : square root of individual weights squared
+
+     */
     private static double normalize(TermWeight[] t) {
         double sum_weight_squared = 0;
         for (int i = 0; i < t.length; i++) {
-            sum_weight_squared = sum_weight_squared + t[i].getWeight() * t[i].getWeight();
+            sum_weight_squared += t[i].getWeight() * t[i].getWeight();
         }
         return Math.sqrt(sum_weight_squared);
     }
 
-    // prints the list of pairs (term,weight) in v
+    // prints the list of pairs (term,weight)
     private static void printTermWeightVector(TermWeight[] v) {
         for (TermWeight tw_tmp : v) {
             System.out.print(tw_tmp.getText() + " " + tw_tmp.getWeight() + "\n");
         }
-
     }
+
+
 
     // returns the cosine similarity of (the documents represented by) v1 and v2
     // and, as a side effect, normalizes them
+    /*
+    input - vector 1 and vector 2
+    returns - cosine similarity between 0 and 1
+    */
     private static double cosineSimilarity(TermWeight[] v1, TermWeight[] v2) {
         double inner_product = 0;
+
         for (int i = 0; i < v1.length; i++) {
-            inner_product = inner_product + v1[i].getWeight() * v2[i].getWeight();
+            for (int j = 0; j < v2.length; j++) {
+                int result = v1[i].getText().compareTo(v2[j].getText());
+                if (result == 0){
+                    inner_product = inner_product + v1[i].getWeight() * v2[j].getWeight();
+                }
+
+            }
         }
         double norm1 = normalize(v1);
         double norm2 = normalize(v2);
 
         return inner_product / (norm1 * norm2);
     }
-
 
 }
