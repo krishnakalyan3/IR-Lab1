@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 import networkx as nx
 
-# Z average degree
 nodes = [70,100,500,1000,4000,6000,10000,100000]
 
 z_deg = 13
@@ -13,6 +12,8 @@ for n in nodes:
 
 
 
+
+# Z average degree
 #G = fast_gnp_random_graph(n, p, seed=123)
 #average_shortest_path_length(G, weight=None)
 # Check if the graph is complete
