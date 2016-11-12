@@ -1,0 +1,31 @@
+---
+title: "Network Models"
+author: "Kalyan and Stepek"
+output: word_document
+header-includes:
+- \usepackage{graphicx}
+- \usepackage{tikzpagenodes}
+- \usetikzlibrary{calc}
+- \usepackage{caption}
+---
+
+# Introduction
+The aim of this assignment was to compute average shortest-path as a function of the parameter p of the WS model and plot the average shortest-path length as a function of the network size of the ER model. We chose to use `networkx library` for our analysis.
+
+# Implementation
+We followed all the instructions as per the pdf document. The first choice we had to take was to figure out the right value for the constant `z` (Average degree) and `p` in such a way that do not get isolated vertex. 
+
+Using the folmula below, we could obtain the best value of `z = 13` for graphs with nodes upto `100,000` where all nodes that give us connected graph. $$z = (n - 1) * p$$.
+
+### Erdos-Renyi Model
+Instead of using the `erdos_renyi_graph` api from from networkx which has $O(n^2)$ runtime complexity, we chose `fast_gnp_random_graph` api as it has $O(n+m)$ run time complexity, `n` is the number of nodes and `m` is the expected of edges. Once we obtained the values of network size between `100` and `100000` and average shortest-path length we obtain the scatter plot below.
+
+<center>![Erdos-Renyi Model](/Users/krishna/MIRI/IR/github/Assignment4/ER.png)
+
+### Watts-Strogatz Model
+We needed to compute clustering coefficient and average shortest-path as a function of parameter `p`. The constants we used were, `k = 4` (Nearest neighbors in ring topology), Size of graph `n = 500` (computaionally it did not take too much time). After obtaining these values over function of parameter `p` we normalized it to be within range `[0, 1]`. After averaging the the cluster coefficient and shortest path over 10 different random seeds we obtained smoothed scatted plot below.
+
+<center>![Watts-Strogatz Model](/Users/krishna/MIRI/IR/github/Assignment4/WS.png)
+
+# Results
+We did not have any problem simulating the results. Using python comprehensions we were optimized our code and improved readibility. The plots obtained for Watts-Strogatz model gave us better results when averaged over multiple graphs with different random seeds.
