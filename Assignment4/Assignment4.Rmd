@@ -23,7 +23,7 @@ Instead of using the `erdos_renyi_graph` api from from networkx which has $O(n^2
 <center>![Erdos-Renyi Model](/Users/krishna/MIRI/IR/github/Assignment4/ER.png)
 
 ### Watts-Strogatz Model
-We needed to compute clustering coefficient and average shortest-path as a function of parameter `p`. The constants we used were, `k = 4` (Nearest neighbors in ring topology), Size of graph `n = 500` (computaionally it did not take too much time). After obtaining these values over function of parameter `p` we normalized it to be within range `[0, 1]`. After averaging the the cluster coefficient and shortest path over 10 different random seeds we obtained smoothed scatted plot below.
+We needed to compute clustering coefficient and average shortest-path as a function of parameter `p`. The constants we used were, `k = 4` (Nearest neighbors in ring topology), Size of graph `n = 500` (Since computaionally it did not take too much time). After obtaining these values over function of parameter `p` we normalized it to be within range `[0, 1]`. By Averaging the the cluster coefficient and shortest path over 10 different random seeds we obtained smoothed scatted plot below.The averaging was performed using a function which for every p generated k values and returned their mean value.
 
 <center>![Watts-Strogatz Model](/Users/krishna/MIRI/IR/github/Assignment4/WS.png)
 
