@@ -1,0 +1,69 @@
+---
+title: 'Network Analysis : London Tube'
+author: "Krishna Kalyan"
+output: html_document
+---
+
+```{r include=FALSE, cache=FALSE}
+library('igraph')
+london_metro = read.csv('london_tube.txt',header=F, sep='\t')
+data = subset(london_metro, select=c(V1,V2))
+names(data) = c('source1','destination1')
+```
+
+# Introduction
+The aim of this assignment is to analyse the `london tube graph`. We will be using `igraph` library to build our network. This data is a simple pairwise connection between metro stations. Our data is contains `r nrow(data)` observations. This parwise connection is a directed graph.
+
+# Analysis
+Our analysis begun by trying to visulize the london tube graph. Our dataframe object had to be converted to graph data frame object. Below we observe that our degree distribution graph. We know that real world networks follow power distribution and we see some similarities. 
+
+```{r echo=F }
+metro_graph = graph.data.frame(d = data, directed = TRUE)
+plot(degree.distribution(metro_graph), xlab="node degree",ylab="Degrees")
+lines(degree.distribution(metro_graph))
+```
+
+We know that real networks have a small diameter and high clustering co-efficient/ Transitivity.
+Transitivity measures the probability that the adjacent vertices of a vertex are connected. This is sometimes also called the clustering coefficient.
+
+```{r }
+diameter(metro_graph)
+transitivity(metro_graph)
+```
+
+### Graph Structure
+Plotting the graph structure below we see a strucutre that a realword starion metro would be like. For example stations far out will be less connected that stations in the city.
+
+```{r }
+plot.igraph(metro_graph, vertex.label = NA, layout=layout_with_kk, vertex.color="green")
+```
+
+Now let see how our graph can be represented using different layout structures so that we gain much deeper intution about the network.
+
+```{r echo=F,warning=F,cache=F}
+layouts <- grep("^layout_", ls("package:igraph"), value=TRUE)[-1] 
+layouts <- layouts[!grepl("bipartite|merge|norm|sugiyama|tree", layouts)]
+par(mfrow=c(2,4), mar=c(0.5,0.5,0.5,0.5))
+for (layout in layouts) {
+  l <- do.call(layout, list(metro_graph)) 
+  plot(metro_graph, edge.arrow.mode=0, layout=l, main=layout, vertex.label = NA) }
+```
+
+### Communities
+```{r echo=F,warning=F,cache=F}
+lec = leading.eigenvector.community(metro_graph)
+plot(fg, df.g, vertex.label = NA)
+mc = multilevel.community(metro_graph)
+plot(mc, df.g, vertex.label = NA)
+oc = optimal.community(metro_graph)
+plot(oc, df.g, vertex.label = NA)
+```
+
+
+
+
+# Difficulties
+We had issues with python and igraph basically installing the cairo library. Hence we had to shift to networkx. However we realized that networkx did not have good plotting libraries and finally used R with igraph.
+
+# Conclusions
+

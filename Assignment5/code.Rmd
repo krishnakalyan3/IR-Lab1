@@ -1,0 +1,84 @@
+---
+title: 'Network Analysis : London Tube'
+author: "Kalyan and Vidal"
+output: pdf_document
+---
+
+```{r include=FALSE, cache=FALSE}
+library('igraph')
+setwd('/Users/krishna/MIRI/IR/session5')
+london_metro = read.csv('london_tube.txt',header=F, sep='\t')
+data = subset(london_metro, select=c(V1,V2))
+names(data) = c('source1','destination1')
+```
+
+# Introduction
+The aim of this assignment is to analyse the `london tube graph`. We will be using `igraph` library to build our network. This data is a simple pairwise connection between metro stations. Our data is contains `r nrow(data)` observations. This parwise connection is a directed graph.
+
+# Analysis
+Our analysis begun by trying to visulize the london tube graph. Our dataframe object had to be converted to graph data frame object. Below we observe that our degree distribution graph. We know that real world networks follow power distribution and we see some similarities. 
+
+```{r echo=F }
+par(mfrow=c(1,2))
+metro_graph = graph.data.frame(d = data, directed = T)
+plot(degree.distribution(metro_graph), xlab="node degree",ylab="Degrees")
+lines(degree.distribution(metro_graph))
+hist(degree(metro_graph),main="",xlab="degree")
+```
+
+We know that real networks have a small diameter and high clustering co-efficient/ Transitivity.
+Transitivity measures the probability that the adjacent vertices of a vertex are connected. This is sometimes also called the clustering coefficient. 
+
+```{r kable, echo=F,warning=F,cache=F}
+library(knitr)
+
+diameter = diameter(metro_graph)
+clustring_coefficient = transitivity(metro_graph)
+average_path_length = average.path.length(metro_graph)
+total_vertices = length(V(metro_graph))
+total_edges = length(E(metro_graph))
+results = rbind(diameter,clustring_coefficient,average_path_length,
+                total_vertices,total_edges)
+results = data.frame(results)
+names(results) = c("Values")
+kable(results)
+```
+
+### Graph Structure
+Plotting the graph structure below we see a strucutre that a realword starion metro would be like. For example stations far out will be less connected that stations in the city.
+
+```{r , echo=F}
+node.size=degree(metro_graph)*2
+plot.igraph(metro_graph, vertex.label = NA, layout=layout_with_kk, vertex.color="blue",edge.arrow.size=0.1, vertex.size=node.size)
+```
+
+# Communities
+Below we show the visualization of communities formed using the `Walktap Community` and `Edge Betweenness Community`.
+
+Walktrap Community is an approach based on random walks. The general idea is that if you perform random walks on the graph, then the walks are more likely to stay within the same community because there are only a few edges that lead outside a given community.
+
+Edge Betweenness Community is a hierarchical decomposition process where edges are removed in the decreasing order of their edge betweenness scores (i.e. the number of shortest paths that pass through a given edge).
+
+```{r ,echo=F}
+par(mfrow=c(1,2))
+wc = walktrap.community(metro_graph)
+plot(wc, metro_graph, vertex.label = NA,edge.arrow.size=0.1, vertex.size=node.size, main="walktrap community")
+ebc = edge.betweenness.community(metro_graph)
+plot(ebc, metro_graph, vertex.label = NA,edge.arrow.size=0.1, vertex.size=node.size, main="edge betweenness community")
+```
+
+We will also analysie Modularity, It is one measure of the structure of networks or graphs. It was designed to measure the strength of division of a network into modules (also called groups, clusters or communities). We also calculate the total communities observed in nodes as Membership.
+
+```{r ,echo=F}
+walktrap = rbind(modularity(wc),max(wc$membership))
+edge_betweenness = rbind(modularity(ebc),max(ebc$membership))
+res2 = data.frame(walktrap,edge_betweenness)
+rownames(res2) =c("Modularity","Membership")
+kable(res2)
+```
+
+# Difficulties
+We had issues with python and igraph basically installing the cairo library. Hence we had to shift to networkx. However we realized that networkx did not have good plotting libraries and finally used R with igraph.
+
+# Conclusion
+We observed that walktrap community produced less clusters and better modularity compared to edge betweenness community.
