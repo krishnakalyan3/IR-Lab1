@@ -1,0 +1,10 @@
+# Run Mongo Dameon
+mongod
+
+# Start Client
+mongo 
+
+# This shows the database
+show dbs
+
+# 

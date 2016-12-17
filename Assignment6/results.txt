@@ -1,0 +1,108 @@
+# 1 and 1
+db.output.find(
+	{ 
+		$and: 
+			[
+				{'supp':{'$gt' : 0.01}}, 
+				{'conf':{'$gt' : 0.01}}
+			]   
+	}
+).count()  
+# 426
+
+
+# 1 and 25
+db.output.find(
+	{ 
+		$and: 
+			[
+				{'supp':{'$gt' : 0.01}}, 
+				{'conf':{'$gt' : 0.25}}
+			]   
+	}
+).count() 
+# 96 
+
+# 1 and 50
+db.output.find(
+	{ 
+		$and: 
+			[
+				{'supp':{'$gt' : 0.01}}, 
+				{'conf':{'$gt' : 0.50}}
+			]   
+	}
+).count()
+# 0
+
+# 1 and 75
+db.output.find(
+	{ 
+		$and: 
+			[
+				{'supp':{'$gt' : 0.01}}, 
+				{'conf':{'$gt' : 0.75}}
+			]   
+	}
+).count()  
+# 0
+
+# 5 and 25
+db.output.find(
+	{ 
+		$and: 
+			[
+				{'supp':{'$gt' : 0.05}}, 
+				{'conf':{'$gt' : 0.25}}
+			]   
+	}
+).count()  
+# 4
+
+# 7 and 25
+db.output.find(
+	{ 
+		$and: 
+			[
+				{'supp':{'$gt' : 0.07}}, 
+				{'conf':{'$gt' : 0.25}}
+			]   
+	}
+).count()  
+# 2
+
+# 20 and 25
+db.output.find(
+	{ 
+		$and: 
+			[
+				{'supp':{'$gt' : 0.20}}, 
+				{'conf':{'$gt' : 0.25}}
+			]   
+	}
+).count()  
+#0
+
+# 50 and 25
+db.output.find(
+	{ 
+		$and: 
+			[
+				{'supp':{'$gt' : 0.50}}, 
+				{'conf':{'$gt' : 0.25}}
+			]   
+	}
+).count()  
+# 0
+
+
+
+ROW	sup	conf		rules
+1	1%	1%			426
+2	1%	25%			96
+3	1%	50%			0
+4	1%	75%			0
+5	5%	25%			4
+6	7%	25%			2
+7	20%	25%			0
+8	50%	25%			0
