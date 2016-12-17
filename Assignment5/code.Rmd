@@ -1,7 +1,7 @@
 ---
 title: 'Network Analysis : London Tube'
 author: "Kalyan and Vidal"
-output: pdf_document
+output: html_document
 ---
 
 ```{r include=FALSE, cache=FALSE}
@@ -26,6 +26,8 @@ lines(degree.distribution(metro_graph))
 hist(degree(metro_graph),main="",xlab="degree")
 ```
 
+According to our plots above we can conclude that our network more or less follows power law. This is a scale free network.
+
 We know that real networks have a small diameter and high clustering co-efficient/ Transitivity.
 Transitivity measures the probability that the adjacent vertices of a vertex are connected. This is sometimes also called the clustering coefficient. 
 
@@ -33,16 +35,24 @@ Transitivity measures the probability that the adjacent vertices of a vertex are
 library(knitr)
 
 diameter = diameter(metro_graph)
+avg_degree = mean(degree.distribution(metro_graph))
 clustring_coefficient = transitivity(metro_graph)
 average_path_length = average.path.length(metro_graph)
 total_vertices = length(V(metro_graph))
+n = total_vertices
 total_edges = length(E(metro_graph))
 results = rbind(diameter,clustring_coefficient,average_path_length,
-                total_vertices,total_edges)
+                total_vertices,total_edges,avg_degree)
 results = data.frame(results)
 names(results) = c("Values")
 kable(results)
+ER_diameter = log(n)/log(avg_degree)
+p = total_edges/(0.5 * n*(n-1))
+print(paste("phat estimation",round(p, digits=4)))
+print(paste("ER diameter estimation",ER_diameter ))
 ```
+
+The value of `clustring_coefficient` `C` is `0.0418994` for our network. Estimated value of phat is `0.041`. We know that if `C` >> `phat` (probability to connect 2 nodes) then we can say that clustering coefficient is high. Hence this network cannot be an `ER` network as out network has high clustering co-efficient. We also `ER` networks have small diameter. According to our estimated diameter we get a negative value or roughly value of `log n` that is around `5`.
 
 ### Graph Structure
 Plotting the graph structure below we see a strucutre that a realword starion metro would be like. For example stations far out will be less connected that stations in the city.
@@ -82,3 +92,9 @@ We had issues with python and igraph basically installing the cairo library. Hen
 
 # Conclusion
 We observed that walktrap community produced less clusters and better modularity compared to edge betweenness community.
+
+- We have observed high clustering coefficient as seen in real networks.
+- Our network is scale free and follows power law.
+- We can also say that our network has hubs since it follows a power law (Nodes with high degree). This asserts our assumtion out a tube network which has lots of connected stations.
+- Low value diameter value.
+- Based on values of modularity and membership we can say communities represent close neighbouring metro station. We see a larger node size if the station is well connected. 

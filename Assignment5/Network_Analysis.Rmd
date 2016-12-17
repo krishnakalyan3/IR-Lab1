@@ -5,6 +5,7 @@ output: html_document
 ---
 
 ```{r include=FALSE, cache=FALSE}
+setwd('/Users/krishna/MIRI/IR/github/Assignment5')
 library('igraph')
 london_metro = read.csv('london_tube.txt',header=F, sep='\t')
 data = subset(london_metro, select=c(V1,V2))
