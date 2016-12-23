@@ -18,9 +18,7 @@ mapper = Code('''
 function(){
 	for (var i = 0; i < this.content.length; i++ ){
 		for (var j = 0; j < this.content.length; j++ ){
-			//if( typeof this.content[j] != 'undefined'){
-			//	emit({item1:this.content[i],item2:this.content[j]}, 1);
-			//}
+
 			if (i != j){
 				emit({item1:this.content[i],item2:this.content[j]}, 1);
 			}
