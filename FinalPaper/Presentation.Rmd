@@ -1,0 +1,92 @@
+---
+title: 'Evaluation: From precision, recall, and F-measure to ROC, informedness, markedness
+  and correlation'
+author: "Krishna Kalyan"
+output: beamer_presentation
+---
+
+
+# About the Author
+<center>
+![](/Users/krishna/MIRI/IR/github/FinalPaper/author1.png)
+</center>
+
+# Introduction
+- Contingency table
+
+<center>
+![](/Users/krishna/MIRI/IR/github/FinalPaper/ct.png)
+</center>
+
+
+- Measure to evaluate Machine Learning System
+a. Precision
+b. Recall
+c. F Measure
+d. Issues with them
+- Alternate Techniques 
+1. Accuracy
+2. Cohen Kappa
+
+
+
+# ROC Analysis
+- ROC analysis give geometric insights into the nature of the measures and their sensitivity to skew
+- Compare Classifiers
+- Choose parameters based on maximization of AUC
+
+<right>
+![Receiver Operating Characteristic](/Users/krishna/MIRI/IR/github/FinalPaper/roc1.png)
+</right>
+
+# Informedness and Markedness
+- Markedness
+
+Markedness quantifies how marked a condition is for the specified predictor, and specifies the probability that a condition is marked by the predictor (versus chance).
+
+Markedness is a deep measure of how consistently the outcome has the Predictor as a Marker by combining surface measures about what proportion of Predictions are correct
+
+Precision + Inverse Precision - $1$
+
+- Informedness
+
+Informedness quantifies how informed a predictor is for the specified condition, and specifies the probability that a prediction is informed in relation to the condition (versus chance).
+
+Informedness is a deep measure of how consistently the predictor predicts the outcome by combining surface measures about what proportion of outcomes are correctly predicted.
+
+Recall + Inverse Recall - $1$
+
+# Regression
+
+- Linear Regression
+- Estimating Coefficients
+a. Rp
+b. Rr
+c. Rg
+
+# Conclusion
+
+Infromedness usually is a better evaluation measure in binary classification.
+
+Further work to research into the multiclass application of the technique.
+
+Explore the relationship between Infromedness and Markedness
+
+We have a better and a more intuitive understanding of the mearues that we could use for evaluating our ML system.
+
+- Accuracy
+- Cohen Kappa
+- Precision
+- Recall
+- F1-Score
+- Bookmaker Informedness / Delta P'
+- Markedness
+
+
+# Skipped
+- Significance
+- Montecarlo Simulation
+- Evenness (Used in multiclass problems)
+
+
+
