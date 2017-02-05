@@ -1,5 +1,5 @@
 # IR-Lab1
-(by Krishna Kalyan and Sebastian Stobiecki)
+(by Krishna Kalyan and Multiple Authors)
 
 To create an index run the following command 
 
